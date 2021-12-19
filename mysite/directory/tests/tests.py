@@ -1,30 +1,21 @@
 from django.test import TestCase
-
-
-"""
-To make a test API call over an authenticated API endpoint, follow
-this pattern:
-
-
-```
-from django.urls import reverse
 from rest_framework.test import APIClient
+from directory.models import User, Company
+
 
 client = APIClient()
-user = ...
-client.force_authenticate(user=self.user)
-response = client.get(reverse('{REVERSED_URL}'))
-```
-
-"""
 
 
 class UsersViewSetAPICase(TestCase):
-
     def setUp(self):
-        # TODO
-        pass
+        self.company = Company.objects.create(name="Test company")
+        self.company2 = Company.objects.create(name="Test company2")
 
-    def test_something(self):
-        # TODO
-        pass
+        self.user = User.objects.create(username="111", first_name="lion", last_name="roar", company=self.company)
+        self.user2 = User.objects.create(
+            username="222", first_name="2", last_name="2", company=self.company, reports_to_id=1
+        )
+        self.user3 = User.objects.create(username="333", first_name="2", last_name="2", company=self.company2)
+        self.user4 = User.objects.create(
+            username="444", first_name="2", last_name="2", company=self.company, reports_to_id=2
+        )
