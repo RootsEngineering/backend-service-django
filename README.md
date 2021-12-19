@@ -20,6 +20,7 @@
 6. Add tests. A mysite/directory/tests/tests.py file is configured for you. Add tests there. To run the tests, open a second shell and use the docker-compose exec directory bash command to enter the running container. Then run the tests with ./manage.py test -v 2.
 - Added tests for some 400 responses, and scenarios from above points. 
 
+I tried to add comments to the commits I did, so that you can follow my thinking process. 
 
 ## Follow-up questions from task:
 
