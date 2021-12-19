@@ -2,7 +2,7 @@
 
 ## Summary 
 
-I tried to solve this task, however I am not sure if answers are 100% correct :) Let me address 'tasks' from readme:
+#### I tried to solve this task, however I am not sure if answers are 100% correct :) Let me address 'tasks' from readme:
 
 1. Make sure that for the /users endpoint, that only users for the calling user's company are shown.
 - Achieved that by adding additional `filter` to `get_queryset` method in `UsersViewSet`.
