@@ -1,47 +1,32 @@
-# backend-project-template
+# backend-service-django
 
-## Welcome
-Hello! Welcome to the backend engineering task as part of your interview process with Deel as a Python/Django developer! This task should take about 1-3 hours of your time. As you're completing the tasks below, make sure you document your process including any snags you hit, trade-offs you made, or shortcuts you decided to take. Your decision-making process is equally as important as the completion of these tasks.
+## Summary 
 
-### Requirements
-- Docker
+I tried to solve this task, however I am not sure if answers are 100% correct :) Let me address 'tasks' from readme:
 
-### Set-up Instructions
-This project is already fully configured to launch. You will only need to add data to the DB to get started.
-
-Clone this repository, navigate into the root directory, and boot up using `docker-compose up directory`. This command will pull the base python image, install requirements, migrate and launch the local server.
-
-To add some data, open another shell and connect to the running container with `docker-compose exec directory bash`. You can then navigate into the directory `cd mysite`, and launch the shell with `./manage.py shell`.
-
-### Data & Models
-The models in this app are very simple. There are only 3 you need to worry about:
-1) The `User` model. This model contains basic attributes from Django, with only the addition of `Company` and `reports_to` foreign keys.
-2) The `Company` model. All `User`s have a `Company`. It is a natural grouping for a Enterprise SaaS product.
-3) The `Token` object (`from rest_framework.authtoken.models import Token`). This will be used for authenticating a `User` over the API.
-
-To add some data, you can use `create_user`.
-```python
->>> from directory.models import *
->>> company = Company.objects.create(name="Test Company")  # Create a new Company
->>> user = User.objects.create_user(username=..., first_name=..., last_name=..., company=company)  # Add a user to the Company.
->>> from rest_framework.authtoken.models import Token  # Import the Token model
->>> token = Token.objects.create(user=user)  # Create an API Token for this new user.
->>> print(token.key)  # Display the API key for this User.
-```
-
-You will likely need to add more data to the DB to properly implement the requirements for the tasks below. Creating a script would *probably* be useful. :wink:
-
-### Tasks
-1) Make sure that for the `/users` endpoint, that only users for the calling user's company are shown.
-2) Update the `reports` action in `UsersViewSet` to return all reports _down_ the reporting tree, recursively.
-3) Add another action, similar to `reports`, called `managers`, that does the inverse of `reports`. It should return all users _up_ the reporting tree from the designated user.
-4) Add a [filter](https://django-filter.readthedocs.io/en/stable/guide/usage.html#the-filter) for the `/users` endpoint that returns only users that have at least 1 report.
-5) Add an inverse to #4 and include a filter to return all users without any reports.
-6) Add tests. A `mysite/directory/tests/tests.py` file is configured for you. Add tests there. To run the tests, open a second shell and use the `docker-compose exec directory bash` command to enter the running container. Then run the tests with `./manage.py test -v 2`.
-
-### Follow-up Questions
-1) Provide a few bullet points of optimizations or improvements you would make if given more time.
-2) Any cool feature ideas that you could add as well with minimal effort?
+1. Make sure that for the /users endpoint, that only users for the calling user's company are shown.
+- Achieved that by adding additional `filter` to `get_queryset` method in `UsersViewSet`.
+2. Update the reports action in UsersViewSet to return all reports down the reporting tree, recursively.
+- Created function which searches for all reports down the tree of reports and returns list of pks so that we can filter `Users` out later.
+4. Add another action, similar to reports, called managers, that does the inverse of reports. It should return all users up the reporting tree from the designated user.
+- Same as above. Only one struggle was that I didn't know if user from which we start should be returned in response or not. I decided 'not', because we want only reports/managers.
+6. Add a filter for the /users endpoint that returns only users that have at least 1 report.
+7. Add an inverse to #4 and include a filter to return all users without any reports.
+- Those both I achieved by adding `BooleanFilter` to `UsersFilterSet`, so when `with_reports=True` is added to the `users/?` endpoint it will respond with adequate answer. Same with `with_reports=False`. 
+- 
+9. Add tests. A mysite/directory/tests/tests.py file is configured for you. Add tests there. To run the tests, open a second shell and use the docker-compose exec directory bash command to enter the running container. Then run the tests with ./manage.py test -v 2.
+- Added tests for some 400 responses, and scenarios from above points. 
 
 
-Good luck!
+## Follow-up questions from task:
+
+### Provide a few bullet points of optimizations or improvements you would make if given more time.
+If given more time I would like to add:
+- Separated script to run tests more convinently
+- Factory to create Users and Companies for testing purposes 
+- Script to populate db executable easier 
+- And I would like to think (and check some Django related stuff) if maybe functions to find recursively reports and managers shoudn't be moved to some `service` section. 
+
+### Any cool feature ideas that you could add as well with minimal effort?
+- Separated endpoint for Company to check various things like - employees, headcount, maybe even some cool statistics like % of man and woman in the company (if we collect such data), also how many people joined the comapny. 
+- Regarding users we can also check number of reports per managers (to optimise it later) which manager have highest cout of not_active users (maybe some problems there). 
