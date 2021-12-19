@@ -33,3 +33,4 @@ If given more time I would like to add:
 ### Any cool feature ideas that you could add as well with minimal effort?
 - Separated endpoint for Company to check various things like - employees, headcount, maybe even some cool statistics like % of man and woman in the company (if we collect such data), also how many people joined the comapny. 
 - Regarding users we can also check number of reports per managers (to optimise it later) which manager have highest cout of not_active users (maybe some problems there). 
+- Also some `POST` methods to create users and companies would make the system more functional. 
