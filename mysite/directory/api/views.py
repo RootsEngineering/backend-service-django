@@ -26,4 +26,5 @@ class UsersViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def get_queryset(self):
-        return User.objects.all()
+        company = self.request.user.company
+        return User.objects.filter(company=company)
