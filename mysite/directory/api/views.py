@@ -38,7 +38,16 @@ class UsersViewSet(viewsets.ModelViewSet):
                 first_user_numbers = [u.pk for u in users]
                 reports_id_list.extend(first_user_numbers)
         return reports_id_list
-    
+
+    def managers(reports_to_num: User.reports_to):
+        managers_id_list = [reports_to_num]
+        while reports_to_num is not None:
+            users = User.objects.filter(pk__exact=reports_to_num)
+            reports_to_num = users[0].reports_to_id
+            managers_id_list.append(reports_to_num)
+        return managers_id_list
+
+
     def get_queryset(self):
         company = self.request.user.company
         return User.objects.filter(company=company)
