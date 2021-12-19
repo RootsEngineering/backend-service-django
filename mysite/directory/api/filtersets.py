@@ -7,14 +7,11 @@ User = get_user_model()
 
 class UsersFilterSet(filters.FilterSet):
     strict = True
-    with_reports = BooleanFilter(field_name='reports_to', method='filter_with_reports')
+    with_reports = BooleanFilter(field_name="reports_to", method="filter_with_reports")
 
     class Meta:
         model = User
-        fields = [
-            'email',
-            'is_active'
-        ]
+        fields = ["email", "is_active"]
 
     def filter_with_reports(self, queryset, name, value):
         if value:
