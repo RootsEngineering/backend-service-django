@@ -19,3 +19,17 @@ class UsersViewSetAPICase(TestCase):
         self.user4 = User.objects.create(
             username="444", first_name="2", last_name="2", company=self.company, reports_to_id=2
         )
+
+    def test_allow_only_authorized_users(self):
+        client.force_authenticate()
+
+        response = client.get("http://localhost:8001/api/users/")
+
+        assert response.status_code == 401
+
+    def test_returns_404_on_wrong_path(self):
+        client.force_authenticate()
+
+        response = client.get("http://localhost:8001/api/user/")
+
+        assert response.status_code == 404
